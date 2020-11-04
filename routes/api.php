@@ -17,3 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('items')->group(function (){
+    Route::get('/', function(){ 
+        return response()->json(['code' => 200]); 
+    });
+    Route::get('/{itemId}', function() {});
+});
+
+Route::prefix('bids')->group(function() {
+    Route::post('/', function() {});
+});
