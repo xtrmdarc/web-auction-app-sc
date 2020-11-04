@@ -20,9 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('items')->group(function() {
     Route::get('/', 'ItemsController@index');
-    Route::get('/{itemId}', function() {});
+    Route::get('/{itemId}', 'ItemsController@show');
 });
 
 Route::prefix('bids')->group(function() {
-    Route::post('/', function() {});
+    Route::post('/', 'BidsController@create');
 });
