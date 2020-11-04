@@ -17,6 +17,8 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->string('item_name');
             $table->dateTime('end_date');
+            $table->string('image');
+            $table->text('description');
             $table->timestamps();
         });
     }

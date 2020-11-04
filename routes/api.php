@@ -18,11 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('items')->group(function() {
-    Route::get('/', 'ItemsController@index');
-    Route::get('/{itemId}', 'ItemsController@show');
-});
+Route::group(['middleware' => 'cors'], function() {
 
-Route::prefix('bids')->group(function() {
-    Route::post('/', 'BidsController@create');
+    Route::prefix('items')->group(function() {
+        Route::get('/', 'ItemsController@index');
+        Route::get('/{itemId}', 'ItemsController@show');
+    });
+
+    Route::prefix('bids')->group(function() {
+        Route::post('/', 'BidsController@create');
+    });
 });

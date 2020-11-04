@@ -9,7 +9,7 @@ class ItemsController extends Controller
 {
     public function index()
     {
-        return Item::whereDate('end_date', '>', now()->toDateTimeString())->get();
+        return Item::active()->get();
     }
 
     public function show(Request $request)

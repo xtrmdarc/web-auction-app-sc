@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBidsTable extends Migration
+class CreateUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateBidsTable extends Migration
      */
     public function up()
     {
-        Schema::create('bids', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id');
-            $table->foreignId('user_id');
-            $table->float('amount');
+            $table->string('name');
+            $table->string('password');
+            $table->string('username');
+            $table->float('max_auto_bid_amount');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateBidsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bids');
+        Schema::dropIfExists('users');
     }
 }

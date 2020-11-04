@@ -16,6 +16,11 @@ class Item extends Model
 
     public function getLastBid()
     {
-        return $this->bids->order_by('created_at', 'desc')->first();
+        return $this->bids()->orderBy('created_at', 'desc')->first();
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereDate('end_date', '>', now());
     }
 }
