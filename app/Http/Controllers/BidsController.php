@@ -9,6 +9,8 @@ class BidsController extends Controller
 {
     public function create(Request $request)
     {
-       Bid::createFromRequest($request);
+        return response()->json($request->all());
+        $result = Bid::createFromRequest($request);
+        return response()->json($result->message, $result->code);
     }
 }

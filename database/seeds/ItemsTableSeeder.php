@@ -19,7 +19,7 @@ class ItemsTableSeeder extends Seeder
         {
             Item::create([
                 'item_name' => $faker->unique()->word(),
-                'end_date' => $faker->dateTimeBetween(now()->subYear(), now()->addYear()),
+                'end_date' => $faker->dateTimeBetween(now()->subWeek(), now()->addWeek()),
                 'image' => $faker->imageUrl(400, 400, 'abstract'),
                 'description' => $faker->realText(),
             ]);

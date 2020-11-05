@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model;
+use App\User;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,7 @@ class Bid extends Model
     public static function createFromRequest($request)
     {
         $result = new \stdClass();
-        $item = Item::find($request['itemdId']);
+        $item = Item::find((int)$request['itemId']);
         $lastBid = $item->getLastBid();
         if($lastBid && $lastBid->amount > $request['amount']) 
         {
@@ -21,7 +22,7 @@ class Bid extends Model
             return $result;
         }
         
-        if($lastBid && $lastBid->user == $request['user'])
+        if($lastBid && $lastBid->userId == $request['userId'])
         {
             $result->message = "You already are the top bidder for this item";
             $result->code = 406;
@@ -29,14 +30,24 @@ class Bid extends Model
         }
 
         $bid = new Bid();
-        $bid->item_id = $request['itemdId'];
+        $bid->item_id = $request['itemId'];
         $bid->amount = $request['amount'];
         $bid->date = now();
-        $bid->user = $request['user'];
+        $bid->user_id = $request['userId'];
         $bid->save();
 
         $result->message = 'Bidded correctly';
         $result->code = 200;
         return $result; 
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'item_id');
     }
 }

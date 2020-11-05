@@ -23,4 +23,20 @@ class Item extends Model
     {
         return $query->whereDate('end_date', '>', now());
     }
+
+    public static function getAllActive()
+    {
+        $items = Item::active()->get();
+        $items->map(function($item){
+            $item->lastBid = $item->getLastBid();
+        });
+        return $items;
+    }
+
+    public static function showItemDetail($itemId)
+    {
+        $item = Item::find($itemId)->load('bids.user');
+        $item->lastBid = $item->getLastBid();
+        return $item;
+    }
 }

@@ -9,12 +9,11 @@ class ItemsController extends Controller
 {
     public function index()
     {
-        return Item::active()->get();
+        return response()->json(Item::getAllActive(), 200);
     }
 
     public function show(Request $request)
     {   
-        $item = Item::find($request['itemId']);
-        return response()->json(['item' => $item, 'lastBid' => $item->getLastBid()], 200);
+        return response()->json(Item::showItemDetail($request['itemId']), 200);
     }
 }
