@@ -34,6 +34,8 @@ class Bid extends Model
         $bid->item_id = $request['itemId'];
         $bid->amount = $request['amount'];
         $bid->user_id = $request['userId'];
+        $bid->enable_auto_bid = $request['enableAutoBid'];
+        $bid->auto_bidded = false;
         $bid->save();
 
         $result->message = 'Bidded correctly';

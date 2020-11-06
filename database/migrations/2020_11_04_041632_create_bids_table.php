@@ -18,6 +18,8 @@ class CreateBidsTable extends Migration
             $table->foreignId('item_id');
             $table->foreignId('user_id');
             $table->float('amount');
+            $table->boolean('auto_bidded')->default(false);
+            $table->boolean('enable_auto_bid')->default(false);
             $table->timestamps();
         });
     }
