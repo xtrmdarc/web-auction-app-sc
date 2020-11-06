@@ -24,8 +24,13 @@ Route::group(['middleware' => 'cors'], function() {
         Route::get('/', 'ItemsController@index');
         Route::get('/{itemId}', 'ItemsController@show');
     });
-});
+    Route::prefix('bids')->group(function() {
+        Route::post('/', 'BidsController@create');
+    });
 
-Route::group(['prefix'=> 'bids', 'middleware' => 'cors'],function() {
-    Route::post('/', 'BidsController@create');
+    Route::post('login', 'UsersController@login');
+
+    Route::prefix('user')->group(function() {
+        Route::put('/{id}', 'UsersController@update');
+    });
 });
