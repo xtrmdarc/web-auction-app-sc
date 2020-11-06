@@ -21,7 +21,8 @@ class UsersController extends Controller
     public function update(Request $request)
     {
         $user = User::find($request['id']);
-        $update = $user->update($request);
+        $update = $user->update($request->all());
+        
         if($update)
             return response()->json($user, 200);
         else 
