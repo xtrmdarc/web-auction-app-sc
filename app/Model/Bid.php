@@ -9,6 +9,7 @@ class Bid extends Model
 {
     protected $primary_key = 'id';
     protected $table = 'bids';
+    protected $with = 'user';
 
     public static function createFromRequest($request)
     {

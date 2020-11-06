@@ -42,7 +42,9 @@ class Item extends Model
 
     public static function showItemDetail($itemId)
     {
-        $item = Item::find($itemId)->load('bids.user');
+        $item = Item::find($itemId)->load(['bids' => function($query) {
+            return $query->orderBy('bids.created_at', 'desc');
+        }]);
         $item->lastBid = $item->getLastBid();
         return $item;
     }
