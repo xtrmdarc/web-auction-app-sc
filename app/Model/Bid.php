@@ -15,14 +15,14 @@ class Bid extends Model
         $result = new \stdClass();
         $item = Item::find((int)$request['itemId']);
         $lastBid = $item->getLastBid();
-        if($lastBid && $lastBid->amount > $request['amount']) 
+        if($lastBid && $lastBid->amount >= $request['amount']) 
         {
-            $result->message = "Bid amount can't be lower than maximun";
+            $result->message = "Your bid needs to be higher than the latest";
             $result->code = 406;
             return $result;
         }
-        
-        if($lastBid && $lastBid->userId == $request['userId'])
+
+        if($lastBid && $lastBid->user_id == $request['userId'])
         {
             $result->message = "You already are the top bidder for this item";
             $result->code = 406;
@@ -32,7 +32,6 @@ class Bid extends Model
         $bid = new Bid();
         $bid->item_id = $request['itemId'];
         $bid->amount = $request['amount'];
-        $bid->date = now();
         $bid->user_id = $request['userId'];
         $bid->save();
 

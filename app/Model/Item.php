@@ -15,8 +15,15 @@ class Item extends Model
     }
 
     public function getLastBid()
-    {
-        return $this->bids()->orderBy('created_at', 'desc')->first();
+    {   
+        $lastBid = $this->bids()->orderBy('created_at', 'desc')->first();
+        if(!$lastBid) 
+        {
+            $lastBid = new Bid();
+            $lastBid->item_id = $this->id;
+            $lastBid->amount = 0.00;
+        }
+        return $lastBid;
     }
 
     public function scopeActive($query)
