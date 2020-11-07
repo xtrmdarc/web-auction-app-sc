@@ -18,7 +18,7 @@ class Bid extends Model
         $result = new \stdClass();
         $item = Item::find((int)$request['itemId']);
         $lastBid = $item->getLastBid();
-        if($lastBid && $lastBid->amount >= $request['amount']) 
+        if($lastBid && $lastBid->amount + $lastBid->auto_bidded_amount >= $request['amount']) 
         {
             $result->message = "Your bid needs to be higher than the latest";
             $result->code = 406;
