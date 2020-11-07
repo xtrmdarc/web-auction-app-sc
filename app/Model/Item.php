@@ -45,7 +45,7 @@ class Item extends Model
     public static function showItemDetail($itemId)
     {
         $item = Item::find($itemId)->load(['bids' => function($query) {
-            return $query->orderBy('bids.created_at', 'desc');
+            return $query->orderBy(DB::raw('amount + auto_bidded_amount'), 'desc');
         }]);
         $item->lastBid = $item->getLastBid();
         return $item;
@@ -56,11 +56,6 @@ class Item extends Model
         $highestBid = $this->getLastBid();
         if(!$highestBid->enable_auto_bid) return;
         if($highestBid->user->getAutoBiddingBalance() < 1) return;
-
-        // if(!$newBid->enable_auto_bid) {
-        //     Bid::createFromAutoBidding($highestBid->user->id, $this->id, $highestBid->amount, 1);
-        //     return;
-        // }
 
         $currentBidderCompeteAmount = $newBid->amount + ($newBid->enable_auto_bid ? $newBid->user->getAutoBiddingBalance() : 0);
         $highestBidderCompeteAmount = $highestBid->amount + $highestBid->auto_bidded_amount +  $highestBid->user->getAutoBiddingBalance();
