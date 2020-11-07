@@ -57,20 +57,23 @@ class Item extends Model
         if(!$highestBid->enable_auto_bid) return;
         if($highestBid->user->getAutoBiddingBalance() < 1) return;
 
-        if(!$newBid->enable_auto_bid) {
-            Bid::createFromAutoBidding($highestBid->user->id, $this->id, $highestBid->amount, 1);
-        }
+        // if(!$newBid->enable_auto_bid) {
+        //     Bid::createFromAutoBidding($highestBid->user->id, $this->id, $highestBid->amount, 1);
+        //     return;
+        // }
 
-        $currentBidderCompeteAmount = $newBid->amount + $newBid->user->getAutoBiddingBalance();
+        $currentBidderCompeteAmount = $newBid->amount + ($newBid->enable_auto_bid ? $newBid->user->getAutoBiddingBalance() : 0);
         $highestBidderCompeteAmount = $highestBid->amount + $highestBid->auto_bidded_amount +  $highestBid->user->getAutoBiddingBalance();
 
         if($currentBidderCompeteAmount > $highestBidderCompeteAmount + 1)
         {
             Bid::createFromAutoBidding($newBid->user->id, $this->id, $newBid->amount, ($highestBidderCompeteAmount + 1 - $newBid->amount));
+            return;
         }
         else 
         {
             Bid::createFromAutoBidding($highestBid->user->id, $this->id, $highestBid->amount, ($currentBidderCompeteAmount + 1 - $highestBid->amount));
+            return;
         }
     }
 }
