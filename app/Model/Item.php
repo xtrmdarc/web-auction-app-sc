@@ -65,8 +65,9 @@ class Item extends Model
         $currentBidderCompeteAmount = $newBid->amount + ($newBid->enable_auto_bid ? $newBid->user->getAutoBiddingBalance() : 0);
         $highestBidderCompeteAmount = $highestBid->amount + $highestBid->auto_bidded_amount +  $highestBid->user->getAutoBiddingBalance();
 
-        if($currentBidderCompeteAmount > $highestBidderCompeteAmount + 1)
+        if($currentBidderCompeteAmount > $highestBidderCompeteAmount + 1 )
         {
+            if (!$newBid->enable_auto_bid ) return;
             Bid::createFromAutoBidding($newBid->user->id, $this->id, $newBid->amount, ($highestBidderCompeteAmount + 1 - $newBid->amount));
             return;
         }
