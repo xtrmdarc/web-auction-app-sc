@@ -42,4 +42,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Bid::class, 'user_id');
     }
+
+    public function getAutoBiddingBalance()
+    {   
+        $amountAutoBidded = $this->getWinningAuctions()->reduce(function($acc, $nextBid) {
+            return $acc + $nextBid->auto_bidded_amount;
+        },0);
+        return $this->max_auto_bid_amount - $amountAutoBidded;
+    }
+
+    public function getWinningAuctions()
+    {
+        return $this->bids->filter(function($bid) {
+            return $bid->id === $bid->item->getLastBid()->id;
+        });
+    }
 }

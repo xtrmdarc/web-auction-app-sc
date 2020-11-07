@@ -22,6 +22,7 @@ class Item extends Model
             $lastBid = new Bid();
             $lastBid->item_id = $this->id;
             $lastBid->amount = 0.00;
+            $lastBid->auto_bidded_amount = 0.00;
         }
         return $lastBid;
     }
@@ -47,5 +48,28 @@ class Item extends Model
         }]);
         $item->lastBid = $item->getLastBid();
         return $item;
+    }
+
+    public function processAutoBidding($newBid)
+    {
+        $highestBid = $this->getLastBid();
+        if(!$highestBid->enable_auto_bid) return;
+        if($highestBid->user->getAutoBiddingBalance() < 1) return;
+
+        if(!$newBid->enable_auto_bid) {
+            Bid::createFromAutoBidding($highestBid->user->id, $this->id, $highestBid->amount, 1);
+        }
+
+        $currentBidderCompeteAmount = $newBid->amount + $newBid->user->getAutoBiddingBalance();
+        $highestBidderCompeteAmount = $highestBid->amount + $highestBid->auto_bidded_amount +  $highestBid->user->getAutoBiddingBalance();
+
+        if($currentBidderCompeteAmount > $highestBidderCompeteAmount + 1)
+        {
+            Bid::createFromAutoBidding($newBid->user->id, $this->id, $newBid->amount, ($highestBidderCompeteAmount + 1 - $newBid->amount));
+        }
+        else 
+        {
+            Bid::createFromAutoBidding($highestBid->user->id, $this->id, $highestBid->amount, ($currentBidderCompeteAmount + 1 - $highestBid->amount));
+        }
     }
 }
