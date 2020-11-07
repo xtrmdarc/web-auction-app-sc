@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
@@ -16,7 +17,7 @@ class Item extends Model
 
     public function getLastBid()
     {   
-        $lastBid = $this->bids()->orderBy('created_at', 'desc')->first();
+        $lastBid = $this->bids()->orderBy(DB::raw('amount + auto_bidded_amount'), 'desc')->first();
         if(!$lastBid) 
         {
             $lastBid = new Bid();
